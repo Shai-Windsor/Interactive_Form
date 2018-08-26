@@ -74,8 +74,8 @@ h4 = document.createElement('h4');
 activities.appendChild(h4);
 
 for (let i = 0; i < activityLabels.length; i++) {
-  activityLabels[i].addEventListener("change", () => {
-    const labelInput = event.target;
+  activityLabels[i].addEventListener("change", (e) => {
+    const labelInput = e.target;
 
     // Returns the time and day from the label's text
     function findTime(label) {
@@ -234,8 +234,8 @@ cvvInput.onkeyup = () => {
 }
 
 // Changes the color of an input's border and label to red
-function errorInput(element, text) {
-  event.preventDefault();
+function errorInput(element, text, e) {
+  e.preventDefault();
 
   // Changes the label's text to the desired string since
   // the user may submit the form before typing anything
@@ -248,30 +248,30 @@ function errorInput(element, text) {
 
 // Stops the form from submitting if there is an issue,
 // also adds a message if there are blank fields
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", (e) => {
   const emailExtension = emailInput.value.substr(emailInput.value.indexOf('@'));
 
   if (nameInput.value === '') {
-    errorInput(nameInput, 'Please enter your name');
+    errorInput(nameInput, 'Please enter your name', e);
   }
   if (!emailInput.value.includes('@') || !emailExtension.includes('.')) {
-    errorInput(emailInput, 'Please enter your email');
+    errorInput(emailInput, 'Please enter your email', e);
   }
   if (totalCost === 0) {
     // The errorInput() function doesn't work for this one, so it has its own code
-    event.preventDefault();
+    e.preventDefault();
     activities.querySelector('legend').textContent = 'Please select an activity';
     activities.querySelector('legend').style.color = 'red';
   }
   if (paymentSelect.value === 'credit card' || paymentSelect.value === 'select_method') {
     if (isNaN(cardNumberInput.value) || cardNumberInput.value.length < 13 || cardNumberInput.value.length > 16) {
-      errorInput(cardNumberInput, 'Please enter a credit card number');
+      errorInput(cardNumberInput, 'Please enter a credit card number', e);
     }
     if (isNaN(zipCodeInput.value) || zipCodeInput.value.length != 5) {
-      errorInput(zipCodeInput, 'Please enter a zip code');
+      errorInput(zipCodeInput, 'Please enter a zip code', e);
     }
     if (isNaN(cvvInput.value) || cvvInput.value.length != 3) {
-      errorInput(cvvInput, 'Please enter a CVV');
+      errorInput(cvvInput, 'Please enter a CVV', e);
     }
   }
 });
